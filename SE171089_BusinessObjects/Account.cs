@@ -19,5 +19,10 @@ namespace SE171089_BusinessObjects
 
         public virtual Role Role { get; set; } = null!;
         public virtual ICollection<Rent> Rents { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, Username: {Username}, Email: {Email}, Password: {Password}, RoleId: {RoleId}, Status: {Status}";
+        }
     }
 }

@@ -8,4 +8,9 @@
   <ItemGroup>
     <ProjectReference Include="..\SE171089_Services\SE171089_Services.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

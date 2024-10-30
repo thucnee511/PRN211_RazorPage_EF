@@ -19,5 +19,10 @@ namespace SE171089_BusinessObjects
 
         public virtual Account User { get; set; } = null!;
         public virtual ICollection<RentDetail> RentDetails { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, UserId: {UserId}, TotalQuatity: {TotalQuatity}, RentTime: {RentTime}, ReturnTime: {ReturnTime}, Status: {Status}";
+        }
     }
 }

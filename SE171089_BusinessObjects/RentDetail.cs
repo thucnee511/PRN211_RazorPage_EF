@@ -12,5 +12,10 @@ namespace SE171089_BusinessObjects
 
         public virtual Book? Book { get; set; }
         public virtual Rent? Rent { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, RentId: {RentId}, BookId: {BookId}, Quantity: {Quantity}";
+        }
     }
 }

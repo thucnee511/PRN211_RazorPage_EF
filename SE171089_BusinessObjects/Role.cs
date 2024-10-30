@@ -14,5 +14,10 @@ namespace SE171089_BusinessObjects
         public string Name { get; set; } = null!;
 
         public virtual ICollection<Account> Accounts { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, Name: {Name}";
+        }
     }
 }

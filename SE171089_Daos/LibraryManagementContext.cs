@@ -82,6 +82,11 @@ namespace SE171089_Daos
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Author)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("author");
+
                 entity.Property(e => e.CateId).HasColumnName("cate_id");
 
                 entity.Property(e => e.Description)
@@ -97,10 +102,9 @@ namespace SE171089_Daos
                     .HasColumnName("quantity")
                     .HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.Title)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("title");
+                entity.Property(e => e.Status)
+                    .HasColumnName("status")
+                    .HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Cate)
                     .WithMany(p => p.Books)
