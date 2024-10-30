@@ -36,24 +36,31 @@ namespace SE171089_Daos.BookDao
             return book;
         }
 
-        public Task<List<Book>> GetActiveBooks()
+        public async Task<List<Book>> GetActiveBooks()
         {
-            throw new NotImplementedException();
+            List<Book> books = await context.Books.Include(b => b.Cate).Where(b => b.Status == 1).ToListAsync();
+            return books;
         }
 
-        public Task<List<Book>> GetBooksByAuthor(string author)
+        public async Task<List<Book>> GetBooksByAuthor(string author)
         {
-            throw new NotImplementedException();
+            return await context.Books.Include(b => b.Cate)
+                .Where(b => b.Author.ToLower().Contains(author.ToLower()))
+                .ToListAsync();
         }
 
-        public Task<List<Book>> GetBooksByCategory(int cateId)
+        public async Task<List<Book>> GetBooksByCategory(int cateId)
         {
-            throw new NotImplementedException();
+            return await context.Books.Include(b => b.Cate)
+                .Where(b => b.CateId == cateId)
+                .ToListAsync();
         }
 
-        public Task<List<Book>> GetBooksByName(string name)
+        public async Task<List<Book>> GetBooksByName(string name)
         {
-            throw new NotImplementedException();
+            return await context.Books.Include(b => b.Cate)
+                .Where(b => b.Name.ToLower().Contains(name.ToLower()))
+                .ToListAsync();
         }
 
         public async Task<List<Book>> GetList()
