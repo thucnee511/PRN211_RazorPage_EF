@@ -24,8 +24,11 @@ namespace SE171089_BusinessObjects
         public virtual DbSet<RentDetail> RentDetails { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
 
-        private string GetConnectionString(){
-            IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        private string GetConnectionString()
+        {
+            IConfigurationBuilder builder
+                = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             IConfigurationRoot configuration = builder.Build();
             return configuration.GetConnectionString("DBConnect");
         }
