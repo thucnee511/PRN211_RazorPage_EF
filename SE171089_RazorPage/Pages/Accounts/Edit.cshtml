@@ -1,0 +1,47 @@
+﻿@page
+@model SE171089_RazorPage.Pages.Accounts.EditModel
+
+<h4>Account</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <input type="hidden" asp-for="Account.Id" />
+            <div class="form-group">
+                <label asp-for="Account.Username" class="control-label"></label>
+                <input asp-for="Account.Username" class="form-control" />
+                <span asp-validation-for="Account.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Email" class="control-label"></label>
+                <input asp-for="Account.Email" class="form-control" />
+                <span asp-validation-for="Account.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Password" class="control-label"></label>
+                <input asp-for="Account.Password" class="form-control" readonly/>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Account.RoleId"/>
+                <label class="control-label">Role Name</label>
+                <input asp-for="Account.Role.Name" class="form-control" readonly/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Status" class="control-label"></label>
+                <input asp-for="Account.Status" class="form-control" readonly/>
+            </div>
+            <p class="text-danger">@ViewData["ErrorMessage"]</p>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
