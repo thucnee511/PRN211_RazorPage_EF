@@ -23,6 +23,11 @@ namespace SE171089_Services.AccountService
             }
         }
 
+        public async Task<Account?> Delete(int id)
+        {
+            return await accountRepository.Delete(id);
+        }
+
         public async Task<Account?> GetAccountById(int v)
         {
             return await accountRepository.GetOne(v);
@@ -31,6 +36,16 @@ namespace SE171089_Services.AccountService
         public async Task<IList<Account>> getActiveAccounts()
         {
             return await accountRepository.GetActiveAccounts();
+        }
+
+        public async Task<Role?> GetRole(int id)
+        {
+            return await roleRepository.GetOne(id);
+        }
+
+        public async Task<Account?> Insert(Account account)
+        {
+            return await accountRepository.Add(account);
         }
 
         public async Task<Account?> Login(string email, string password)

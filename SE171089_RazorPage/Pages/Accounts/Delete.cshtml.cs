@@ -7,35 +7,34 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SE171089_BusinessObjects;
 using SE171089_Daos;
+using SE171089_Services.AccountService;
 
 namespace SE171089_RazorPage.Pages.Accounts
 {
     public class DeleteModel : PageModel
     {
-        private readonly SE171089_Daos.LibraryManagementContext _context;
+        private readonly IAccountService accountService;
 
-        public DeleteModel(SE171089_Daos.LibraryManagementContext context)
+        public DeleteModel(IAccountService accountService)
         {
-            _context = context;
+            this.accountService = accountService;
         }
 
         [BindProperty]
-      public Account Account { get; set; } = default!;
+        public Account Account { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Accounts == null)
+            if (id == null || accountService == null)
             {
                 return NotFound();
             }
-
-            var account = await _context.Accounts.FirstOrDefaultAsync(m => m.Id == id);
-
+            var account = await accountService.GetAccountById(id.GetValueOrDefault());
             if (account == null)
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Account = account;
             }
@@ -44,19 +43,16 @@ namespace SE171089_RazorPage.Pages.Accounts
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Accounts == null)
+            if (id == null || accountService == null)
             {
                 return NotFound();
             }
-            var account = await _context.Accounts.FindAsync(id);
-
+            var account = await accountService.GetAccountById(id.GetValueOrDefault());
             if (account != null)
             {
                 Account = account;
-                _context.Accounts.Remove(Account);
-                await _context.SaveChangesAsync();
+                Account = await accountService.Delete(Account.Id);
             }
-
             return RedirectToPage("./Index");
         }
     }

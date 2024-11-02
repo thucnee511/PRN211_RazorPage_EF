@@ -29,7 +29,7 @@ namespace SE171089_Daos.AccountDao
             }
             context.Accounts.Add(obj);
             await context.SaveChangesAsync();
-            Account? account = await context.Accounts.Include(a => a.Role).OrderByDescending(a => a.Id).FirstOrDefaultAsync();
+            Account? account = await context.Accounts.OrderByDescending(a => a.Id).FirstOrDefaultAsync();
             return account;
         }
 
@@ -43,31 +43,31 @@ namespace SE171089_Daos.AccountDao
 
         public async Task<Account?> GetAccountByEmail(string email)
         {
-            Account? account = await context.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email);
+            Account? account = await context.Accounts.FirstOrDefaultAsync(a => a.Email == email);
             return account;
         }
 
         public async Task<List<Account>> GetAccountsByRoleId(int roleId)
         {
-            List<Account> accounts = await context.Accounts.Include(a => a.Role).Where(a => a.RoleId == roleId).ToListAsync();
+            List<Account> accounts = await context.Accounts.Where(a => a.RoleId == roleId).ToListAsync();
             return accounts;
         }
 
         public async Task<List<Account>> GetActiveAccounts()
         {
-            List<Account> accounts = await context.Accounts.Include(a => a.Role).Where(a => a.Status == 1).ToListAsync();
+            List<Account> accounts = await context.Accounts.Where(a => a.Status == 1).ToListAsync();
             return accounts;
         }
 
         public async Task<List<Account>> GetList()
         {
-            List<Account> accounts = await context.Accounts.Include(a => a.Role).ToListAsync();
+            List<Account> accounts = await context.Accounts.ToListAsync();
             return accounts;
         }
 
         public async Task<Account?> GetOne(int id)
         {
-            Account? account = await context.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Id == id);
+            Account? account = await context.Accounts.FirstOrDefaultAsync(a => a.Id == id);
             return account;
         }
 

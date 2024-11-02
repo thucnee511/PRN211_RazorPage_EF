@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using SE171089_BusinessObjects;
-using SE171089_Daos;
 using SE171089_Services.AccountService;
+using System.ComponentModel.DataAnnotations;
 
 namespace SE171089_RazorPage.Pages.Accounts
 {
@@ -19,10 +13,14 @@ namespace SE171089_RazorPage.Pages.Accounts
         {
             this.accountService = accountService;
         }
-
-        [BindProperty]
         public Account Account { get; set; } = default!;
-
+        [BindProperty]
+        [Required(ErrorMessage ="Username is required")]
+        public string Username { get; set; } = "";
+        [BindProperty]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Email is invalid")]
+        public string Email { get; set; } = "";
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null || accountService == null)
@@ -30,6 +28,10 @@ namespace SE171089_RazorPage.Pages.Accounts
                 return NotFound();
             }
             Account? account = await accountService.GetAccountById(id.GetValueOrDefault());
+            Role? role = await accountService.GetRole(account.RoleId);
+            ViewData["RoleName"] = role.Name;
+            ViewData["Username"] = account.Username;
+            ViewData["Email"] = account.Email;
             if (account == null)
             {
                 return NotFound();
@@ -40,7 +42,7 @@ namespace SE171089_RazorPage.Pages.Accounts
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (!ModelState.IsValid)
             {
@@ -48,7 +50,10 @@ namespace SE171089_RazorPage.Pages.Accounts
             }
             try
             {
-                Account? updatedAccount = await accountService.Update(Account);
+                Account? account = await accountService.GetAccountById(id.GetValueOrDefault());
+                account.Username = Username;
+                account.Email = Email;
+                Account? updatedAccount = await accountService.Update(account);
                 if (updatedAccount == null)
                 {
                     return NotFound();
