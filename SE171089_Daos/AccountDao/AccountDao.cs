@@ -73,7 +73,7 @@ namespace SE171089_Daos.AccountDao
 
         public async Task<List<Account>> SearchAccounts(string keyword)
         {
-            return await context.Accounts.Where(a => a.Email.Contains(keyword) || a.Username.Contains(keyword)).ToListAsync();
+            return await context.Accounts.Where(a => (a.Email.Contains(keyword) || a.Username.Contains(keyword)) && a.Status == 1).ToListAsync();
         }
 
         public async Task<Account?> Update(Account obj)

@@ -2,7 +2,13 @@
 @model SE171089_RazorPage.Pages.Rents.DeleteModel
 
 @{
-    ViewData["Title"] = "Rent Details";
+    ViewData["Title"] = "Remove Rent";
+    int RoleId = Convert.ToInt32(HttpContext.Session.GetString("RoleId"));
+    if (RoleId != 1 && RoleId != 2)
+    {
+        Response.Redirect("/PermissionDenied");
+    }
+
 }
 
 <h1>Rent Details</h1>
@@ -75,6 +81,7 @@
         </tbody>
     </table>
 </div>
+<p class="text-danger">@ViewData["ErrorMessage"]</p>
 <form method="post">
     <div class="form-group">
         <input type="submit" value="Delete" class="btn btn-primary" />

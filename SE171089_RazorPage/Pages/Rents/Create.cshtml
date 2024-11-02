@@ -1,6 +1,14 @@
 @page
 @using SE171089_BusinessObjects
 @model SE171089_RazorPage.Pages.Rents.CreateModel
+@{
+    ViewData["Title"] = "Create";
+    int RoleId = Convert.ToInt32(HttpContext.Session.GetString("RoleId"));
+    if (RoleId != 1 && RoleId != 2)
+    {
+        Response.Redirect("/PermissionDenied");
+    }
+}
 <h2>Create Rent</h2>
 <form method="get">
     <div class="form-group">
@@ -69,15 +77,15 @@
 </div>
 <form method="post">
     <div class="form-group">
-        <label>User</label>
+        <label>Renting User</label>
         <select class="form-control" asp-for="AccountId">
-            <option value="0">All</option>
             @foreach (var item in Model.Accounts)
             {
                 <option value="@item.Id">@item.Username</option>
             }
         </select>
     </div>
+    <p class="text-danger">@ViewData["ErrorMessage"]</p>
     <div class="form-group">
         <input type="submit" value="Create Rent" class="btn btn-primary" />
     </div>

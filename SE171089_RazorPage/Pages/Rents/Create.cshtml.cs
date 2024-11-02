@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SE171089_BusinessObjects;
 using SE171089_Services.AccountService;
 using SE171089_Services.BookService;
@@ -53,11 +54,19 @@ namespace SE171089_RazorPage.Pages.Rents
             Books = await bookService.GetBooks(cateId.GetValueOrDefault(), bookKeyword ?? string.Empty);
             Categories = await bookService.GetAllCategories();
             RentDetails = await GetRentDetail();
-            RentDetails = await AddRentDetail(RentDetails, new RentDetail
+            try
             {
-                BookId = BookId,
-                Quantity = Quantity
-            });
+                RentDetails = await AddRentDetail(RentDetails, new RentDetail
+                {
+                    BookId = BookId,
+                    Quantity = Quantity
+                });
+            }
+            catch (Exception e)
+            {
+                ViewData["ErrorMessage"] = e.Message;
+                return Page();
+            }
             await SaveRentDetail(RentDetails);
             return RedirectToPage("./Create");
         }
@@ -78,12 +87,36 @@ namespace SE171089_RazorPage.Pages.Rents
             {
                 return Page();
             }
+            await HttpContext.Session.CommitAsync();
             Accounts = await accountService.Search(accountKeyword ?? string.Empty);
             Books = await bookService.GetBooks(cateId.GetValueOrDefault(), bookKeyword ?? string.Empty);
             Categories = await bookService.GetAllCategories();
             RentDetails = await GetRentDetail();
             int totalQuantity = RentDetails.Sum(rd => rd.Quantity).GetValueOrDefault();
-            await rentService.RentBook(AccountId, totalQuantity, RentDetails);
+            try
+            {
+                if (totalQuantity == 0)
+                {
+                    throw new Exception("No book to rent");
+                }
+                foreach (var rentDetail in RentDetails)
+                {
+                    if (rentDetail.Quantity > rentDetail.Book.Quantity)
+                    {
+                        throw new Exception("Not enough book to rent");
+                    }
+                    Book book = await bookService.GetBookById(rentDetail.BookId.GetValueOrDefault());
+                    book.Quantity -= rentDetail.Quantity;
+                    await bookService.Update(book);
+                }
+                await rentService.RentBook(AccountId, totalQuantity, RentDetails);
+            }
+            catch (Exception e)
+            {
+                ViewData["ErrorMessage"] = e.Message;
+                return Page();
+            }
+            HttpContext.Session.Remove("rd");
             return RedirectToPage("./Index");
         }
 
@@ -128,6 +161,10 @@ namespace SE171089_RazorPage.Pages.Rents
             {
                 if (item.BookId == rentDetail.BookId)
                 {
+                    if (item.Quantity + rentDetail.Quantity > item.Book.Quantity)
+                    {
+                        throw new Exception("Not enough book to rent");
+                    }
                     item.Quantity += rentDetail.Quantity;
                     return rentDetails;
                 }

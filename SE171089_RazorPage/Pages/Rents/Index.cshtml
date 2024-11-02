@@ -40,6 +40,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Rent[0].User.Username)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rent[0].Status)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -60,6 +63,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.User.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
                     <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

@@ -16,5 +16,10 @@ namespace SE171089_RazorPage.Pages
         {
 
         }
+
+        public void OnPost()
+        {
+            HttpContext.Session.Clear();
+        }
     }
 }

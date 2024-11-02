@@ -23,6 +23,7 @@ namespace SE171089_Daos.RentDetailDao
         public async Task<RentDetail?> Add(RentDetail obj)
         {
             context.RentDetails.Add(obj);
+            await context.SaveChangesAsync();
             RentDetail? rentDetail = await context.RentDetails
                 .OrderByDescending(rd => rd.Id).FirstOrDefaultAsync();
             return rentDetail;

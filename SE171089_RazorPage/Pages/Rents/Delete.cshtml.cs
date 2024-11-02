@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SE171089_BusinessObjects;
 using SE171089_Services.AccountService;
 using SE171089_Services.BookService;
@@ -54,12 +55,23 @@ namespace SE171089_RazorPage.Pages.Rents
                 return NotFound();
             }
             Rent rent = await rentService.GetRentById(id.GetValueOrDefault());
+
             if (rent == null)
             {
                 return NotFound();
             }
-            await rentService.Remove(rent);
-            return RedirectToPage("./Index", new { id = rent.Id });
+            try
+            {
+                await rentService.Remove(rent);
+            }
+            catch (Exception e)
+            {
+                Rent = rent;
+                RentDetails = await rentService.GetRentDetails(id.Value);
+                ViewData["ErrorMessage"] = e.Message;
+                return Page();
+            }
+            return RedirectToPage("./Index");
         }
     }
 }

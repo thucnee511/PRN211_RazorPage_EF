@@ -58,8 +58,15 @@ namespace SE171089_RazorPage.Pages.Rents
             {
                 return NotFound();
             }
+            List<RentDetail> rentDetails = await rentService.GetRentDetails(id.Value);
+            foreach (RentDetail rentDetail in rentDetails)
+            {
+                Book book = await bookService.GetBookById(rentDetail.BookId.GetValueOrDefault());
+                book.Quantity += rentDetail.Quantity;
+                await bookService.Update(book);
+            }
             await rentService.MarkReturn(rent);
-            return RedirectToPage("./Index", new { id = rent.Id });
+            return RedirectToPage("./Index");
         }
     }
 }

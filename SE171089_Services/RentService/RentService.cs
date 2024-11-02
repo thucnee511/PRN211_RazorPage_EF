@@ -45,13 +45,17 @@ namespace SE171089_Services.RentService
 
         public async Task<Rent?> MarkReturn(Rent rent)
         {
-            rent.RentTime = DateTime.Now;
+            rent.ReturnTime = DateTime.Now;
             rent.Status = "returned";
             return await rentRepository.Update(rent);
         }
 
         public async Task<Rent?> Remove(Rent rent)
         {
+            if (rent.Status == "renting")
+            {
+                throw new Exception("Cannot remove a renting rent");
+            }
             rent.Status = "removed";
             return await rentRepository.Update(rent);
         }
