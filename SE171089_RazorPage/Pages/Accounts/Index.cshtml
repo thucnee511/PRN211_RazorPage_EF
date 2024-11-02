@@ -2,7 +2,7 @@
 @model SE171089_RazorPage.Pages.Accounts.IndexModel
 @{
     int RoleId = Convert.ToInt32(HttpContext.Session.GetString("RoleId"));
-    if(RoleId != 1 && RoleId != 2)
+    if (RoleId != 1 && RoleId != 2)
     {
         Response.Redirect("/PermissionDenied");
     }
@@ -10,6 +10,12 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<form method="get">
+    <div class="form-group">
+        <input type="text" class="form-control" name="keyword" value="@ViewData["keyword"]" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
 <table class="table">
     <thead>
         <tr>

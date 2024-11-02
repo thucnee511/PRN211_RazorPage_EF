@@ -24,7 +24,7 @@ namespace SE171089_Daos.BookDao
         {
             context.Books.Add(obj);
             await context.SaveChangesAsync();
-            Book? book = await context.Books.Include(b => b.Cate).OrderByDescending(b => b.Id).FirstOrDefaultAsync();
+            Book? book = await context.Books.OrderByDescending(b => b.Id).FirstOrDefaultAsync();
             return book;
         }
 
@@ -38,40 +38,40 @@ namespace SE171089_Daos.BookDao
 
         public async Task<List<Book>> GetActiveBooks()
         {
-            List<Book> books = await context.Books.Include(b => b.Cate).Where(b => b.Status == 1).ToListAsync();
+            List<Book> books = await context.Books.Where(b => b.Status == 1).ToListAsync();
             return books;
         }
 
         public async Task<List<Book>> GetBooksByAuthor(string author)
         {
-            return await context.Books.Include(b => b.Cate)
+            return await context.Books
                 .Where(b => b.Author.ToLower().Contains(author.ToLower()))
                 .ToListAsync();
         }
 
         public async Task<List<Book>> GetBooksByCategory(int cateId)
         {
-            return await context.Books.Include(b => b.Cate)
+            return await context.Books
                 .Where(b => b.CateId == cateId)
                 .ToListAsync();
         }
 
         public async Task<List<Book>> GetBooksByName(string name)
         {
-            return await context.Books.Include(b => b.Cate)
+            return await context.Books
                 .Where(b => b.Name.ToLower().Contains(name.ToLower()))
                 .ToListAsync();
         }
 
         public async Task<List<Book>> GetList()
         {
-            List<Book> books = await context.Books.Include(b => b.Cate).ToListAsync();
+            List<Book> books = await context.Books.ToListAsync();
             return books;
         }
 
         public async Task<Book?> GetOne(int id)
         {
-            Book? book = await context.Books.Include(b => b.Cate).FirstOrDefaultAsync(b => b.Id == id);
+            Book? book = await context.Books.FirstOrDefaultAsync(b => b.Id == id);
             return book;
         }
 

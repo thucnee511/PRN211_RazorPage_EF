@@ -23,7 +23,7 @@ namespace SE171089_Daos.RentDetailDao
         public async Task<RentDetail?> Add(RentDetail obj)
         {
             context.RentDetails.Add(obj);
-            RentDetail? rentDetail = await context.RentDetails.Include(rd => rd.Book)
+            RentDetail? rentDetail = await context.RentDetails
                 .OrderByDescending(rd => rd.Id).FirstOrDefaultAsync();
             return rentDetail;
         }
@@ -38,20 +38,20 @@ namespace SE171089_Daos.RentDetailDao
 
         public async Task<List<RentDetail>> GetDetailsByRentId(int rentId)
         {
-            List<RentDetail> list = await context.RentDetails.Include(rd => rd.Book)
+            List<RentDetail> list = await context.RentDetails
                 .Where(rd => rd.RentId == rentId).ToListAsync();
             return list;
         }
 
         public async Task<List<RentDetail>> GetList()
         {
-            List<RentDetail> list = await context.RentDetails.Include(rd => rd.Book).ToListAsync();
+            List<RentDetail> list = await context.RentDetails.ToListAsync();
             return list;
         }
 
         public async Task<RentDetail?> GetOne(int id)
         {
-            RentDetail? rentDetail = await context.RentDetails.Include(rd => rd.Book)
+            RentDetail? rentDetail = await context.RentDetails
                 .FirstOrDefaultAsync(rd => rd.Id == id);
             return rentDetail;
         }

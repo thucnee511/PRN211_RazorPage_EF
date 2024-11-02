@@ -24,7 +24,7 @@ namespace SE171089_Daos.RentDao
         {
             context.Rents.Add(obj);
             await context.SaveChangesAsync();
-            Rent? rent = await context.Rents.Include(r => r.User).OrderByDescending(r => r.Id).FirstOrDefaultAsync();
+            Rent? rent = await context.Rents.OrderByDescending(r => r.Id).FirstOrDefaultAsync();
             return rent;
         }
 
@@ -38,7 +38,7 @@ namespace SE171089_Daos.RentDao
 
         public async Task<List<Rent>> GetAccountRentsInTime(int accountId, DateTime from, DateTime to)
         {
-            List<Rent> rents = await context.Rents.Include(r => r.User)
+            List<Rent> rents = await context.Rents
                 .Where(r => r.UserId == accountId && r.RentTime >= from && r.RentTime <= to)
                 .ToListAsync();
             return rents;
@@ -46,20 +46,20 @@ namespace SE171089_Daos.RentDao
 
         public async Task<List<Rent>> GetList()
         {
-            List<Rent> rents = await context.Rents.Include(r => r.User).ToListAsync();
+            List<Rent> rents = await context.Rents.ToListAsync();
             return rents;
         }
 
         public async Task<Rent?> GetOne(int id)
         {
-            Rent? rent = await context.Rents.Include(r => r.User)
+            Rent? rent = await context.Rents
                 .FirstOrDefaultAsync(r => r.Id == id);
             return rent;
         }
 
         public async Task<List<Rent>> GetRentingRents()
         {
-            List<Rent> rents = await context.Rents.Include(r => r.User)
+            List<Rent> rents = await context.Rents
                 .Where(r => r.Status.ToLower() == "renting")
                 .ToListAsync();
             return rents;
@@ -67,7 +67,7 @@ namespace SE171089_Daos.RentDao
 
         public async Task<List<Rent>> GetRentsByAccountId(int accountId)
         {
-            List<Rent> rents = await context.Rents.Include(r => r.User)
+            List<Rent> rents = await context.Rents
                 .Where(r => r.UserId == accountId)
                 .ToListAsync();
             return rents;
@@ -75,7 +75,7 @@ namespace SE171089_Daos.RentDao
 
         public async Task<List<Rent>> GetRentsInTime(DateTime from, DateTime to)
         {
-            List<Rent> rents = await context.Rents.Include(r => r.User)
+            List<Rent> rents = await context.Rents
                 .Where(r => r.RentTime >= from && r.RentTime <= to)
                 .ToListAsync();
             return rents;
@@ -83,7 +83,7 @@ namespace SE171089_Daos.RentDao
 
         public async Task<List<Rent>> GetReturnedRents()
         {
-            List<Rent> rents = await context.Rents.Include(r => r.User)
+            List<Rent> rents = await context.Rents
                 .Where(r => r.Status.ToLower() == "returned")
                 .ToListAsync();
             return rents;
