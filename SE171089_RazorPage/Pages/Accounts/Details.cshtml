@@ -1,6 +1,12 @@
 ﻿@page
 @model SE171089_RazorPage.Pages.Accounts.DetailsModel
-
+@{
+    int RoleId = Convert.ToInt32(HttpContext.Session.GetString("RoleId"));
+    if (RoleId != 1 && RoleId != 2)
+    {
+        Response.Redirect("/PermissionDenied");
+    }
+}
 <div>
     <h4>Account</h4>
     <hr />

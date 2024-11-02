@@ -75,6 +75,12 @@ namespace SE171089_Daos.BookDao
             return book;
         }
 
+        public async Task<List<Book>> SearchBook(int cateId, string keyword)
+            => await context.Books
+                .Where(b => (cateId == 0 || b.CateId == cateId)
+                && (b.Name.ToLower().Contains(keyword.ToLower()) || b.Author.ToLower().Contains(keyword.ToLower())))
+                .ToListAsync();
+
         public async Task<Book?> Update(Book obj)
         {
             context.Books.Update(obj);

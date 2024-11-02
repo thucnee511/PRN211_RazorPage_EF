@@ -60,6 +60,11 @@ namespace SE171089_Repositories.BookRepository
             return await bookDao.GetOne(id);
         }
 
+        public async Task<List<Book>> SearchBook(int cateId, string keyword)
+        {
+            return await bookDao.SearchBook(cateId, keyword);
+        }
+
         public async Task<Book?> Update(Book obj)
         {
             return await bookDao.Update(obj);

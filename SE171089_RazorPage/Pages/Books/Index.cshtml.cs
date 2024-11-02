@@ -7,26 +7,29 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SE171089_BusinessObjects;
 using SE171089_Daos;
+using SE171089_Services.BookService;
 
 namespace SE171089_RazorPage.Pages.Books
 {
     public class IndexModel : PageModel
     {
-        private readonly SE171089_Daos.LibraryManagementContext _context;
+        private readonly IBookService bookService;
 
-        public IndexModel(SE171089_Daos.LibraryManagementContext context)
+        public IndexModel(IBookService bookService)
         {
-            _context = context;
+            this.bookService = bookService;
         }
 
         public IList<Book> Book { get;set; } = default!;
-
-        public async Task OnGetAsync()
+        public IList<Category> Category { get;set; } = default!;
+        public async Task OnGetAsync(int? cateId, string? keyword)
         {
-            if (_context.Books != null)
+            Category = await bookService.GetAllCategories();
+            Book = await bookService.GetBooks(cateId.GetValueOrDefault(), keyword);
+            foreach(var item in Book)
             {
-                Book = await _context.Books
-                .Include(b => b.Cate).ToListAsync();
+                Category category = await bookService.GetCategoryById(item.CateId);
+                item.Cate = category;
             }
         }
     }

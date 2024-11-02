@@ -1,4 +1,5 @@
-﻿using SE171089_Repositories.BookRepository;
+﻿using SE171089_BusinessObjects;
+using SE171089_Repositories.BookRepository;
 using SE171089_Repositories.CategoryRepository;
 
 namespace SE171089_Services.BookService
@@ -20,6 +21,21 @@ namespace SE171089_Services.BookService
                 instance ??= new();
                 return instance;
             }
+        }
+
+        public async Task<List<Category>> GetAllCategories()
+        {
+            return await categoryRepository.GetList();
+        }
+
+        public async Task<List<Book>> GetBooks(int cateId, string? keyword)
+        {
+            return await bookRepository.SearchBook(cateId, keyword ?? "");
+        }
+
+        public async Task<Category?> GetCategoryById(int id)
+        {
+            return await categoryRepository.GetOne(id);
         }
     }
 }
