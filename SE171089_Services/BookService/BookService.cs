@@ -23,6 +23,11 @@ namespace SE171089_Services.BookService
             }
         }
 
+        public async Task<Book?> DeleteBook(int id)
+        {
+            return await bookRepository.Delete(id);
+        }
+
         public async Task<List<Category>> GetAllCategories()
         {
             return await categoryRepository.GetList();

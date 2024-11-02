@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SE171089_BusinessObjects;
 using SE171089_Daos;
+using SE171089_Services.BookService;
 
 namespace SE171089_RazorPage.Pages.Books
 {
     public class DeleteModel : PageModel
     {
-        private readonly SE171089_Daos.LibraryManagementContext _context;
+        private readonly IBookService bookService;
 
-        public DeleteModel(SE171089_Daos.LibraryManagementContext context)
+        public DeleteModel(IBookService bookService)
         {
-            _context = context;
+            this.bookService = bookService;
         }
 
         [BindProperty]
@@ -24,19 +25,19 @@ namespace SE171089_RazorPage.Pages.Books
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Books == null)
+            if (id == null || bookService == null)
             {
                 return NotFound();
             }
-
-            var book = await _context.Books.FirstOrDefaultAsync(m => m.Id == id);
-
+            var book = await bookService.GetBookById(id.GetValueOrDefault());
             if (book == null)
             {
                 return NotFound();
             }
             else 
             {
+                var cate = await bookService.GetCategoryById(book.CateId);
+                book.Cate = cate;
                 Book = book;
             }
             return Page();
@@ -44,19 +45,23 @@ namespace SE171089_RazorPage.Pages.Books
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Books == null)
+            if (id == null || bookService == null)
             {
                 return NotFound();
             }
-            var book = await _context.Books.FindAsync(id);
+            var book = await bookService.GetBookById(id.GetValueOrDefault());
 
             if (book != null)
             {
-                Book = book;
-                _context.Books.Remove(Book);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    Book = book;
+                    await bookService.DeleteBook(Book.Id);
+                }catch(Exception e)
+                {
+                    ViewData["ErrorMessage"] = e.Message;
+                }
             }
-
             return RedirectToPage("./Index");
         }
     }
