@@ -22,11 +22,26 @@ namespace SE171089_RazorPage.Pages.Books
 
         public IList<Book> Book { get;set; } = default!;
         public IList<Category> Category { get;set; } = default!;
-        public async Task OnGetAsync(int? cateId, string? keyword)
+        public async Task OnGetAsync(int cateId, string? keyword, int orderBy)
         {
             Category = await bookService.GetAllCategories();
-            Book = await bookService.GetBooks(cateId.GetValueOrDefault(), keyword);
-            foreach(var item in Book)
+            Book = await bookService.GetBooks(cateId, keyword);
+            switch(orderBy)
+            {
+                case 1:
+                    Book = Book.OrderBy(b => b.Name).ToList();
+                    break;
+                case 2:
+                    Book = Book.OrderBy(b => b.Author).ToList();
+                    break;
+                case 3:
+                    Book = Book.OrderBy(b => b.Quantity).ToList();
+                    break;
+                case 4:
+                    Book = Book.OrderBy(b => b.CateId).ToList();
+                    break;
+            }
+            foreach (var item in Book)
             {
                 Category category = await bookService.GetCategoryById(item.CateId);
                 item.Cate = category;
