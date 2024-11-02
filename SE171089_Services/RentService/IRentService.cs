@@ -10,5 +10,6 @@ namespace SE171089_Services.RentService
         Task<List<RentDetail>> GetRentDetails(int rentId);
         Task<Rent?> MarkReturn(Rent rent);
         Task<Rent?> Remove(Rent rent);
+        Task<Rent?> RentBook(int accountId,int total, List<RentDetail> rentDetails);
     }
 }

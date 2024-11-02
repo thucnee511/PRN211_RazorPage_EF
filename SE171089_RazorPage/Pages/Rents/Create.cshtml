@@ -1,0 +1,86 @@
+@page
+@using SE171089_BusinessObjects
+@model SE171089_RazorPage.Pages.Rents.CreateModel
+<h2>Create Rent</h2>
+<form method="get">
+    <div class="form-group">
+        <input type="text" class="form-control" name="accountKeyword" />
+    </div>
+    <div class="form-group">
+        <label>Category</label>
+        <select class="form-control" name="cateId">
+            <option value="0">All</option>
+            @foreach (var item in Model.Categories)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="bookKeyword" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<form method="post">
+    <div class="form-group">
+        <label>Book</label>
+        <select class="form-control" asp-for="BookId">
+            <option value="0">All</option>
+            @foreach (var item in Model.Books)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Quantity" class="control-label"></label>
+        <input asp-for="Quantity" class="form-control" type="number"/>
+        <span asp-validation-for="Quantity" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" asp-page-handler="AddRentDetail" class="btn btn-secondary">Add Rent Detail</button>
+    </div>
+</form>
+<div>
+    <h3>Rent Details</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.RentDetails)
+            {
+                <tr>
+                    <td>@detail.Book.Name</td>
+                    <td>@detail.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<form method="post">
+    <div class="form-group">
+        <label>User</label>
+        <select class="form-control" asp-for="AccountId">
+            <option value="0">All</option>
+            @foreach (var item in Model.Accounts)
+            {
+                <option value="@item.Id">@item.Username</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create Rent" class="btn btn-primary" />
+    </div>
+</form>
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

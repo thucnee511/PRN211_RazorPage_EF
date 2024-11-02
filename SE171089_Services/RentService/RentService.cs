@@ -55,5 +55,28 @@ namespace SE171089_Services.RentService
             rent.Status = "removed";
             return await rentRepository.Update(rent);
         }
+
+        public async Task<Rent?> RentBook(int accountId,int total, List<RentDetail> rentDetails)
+        {
+            Rent rent = new Rent
+            {
+                UserId = accountId,
+                RentTime = DateTime.Now,
+                TotalQuatity = total,
+                Status = "renting"
+            };
+            rent = await rentRepository.Add(rent);
+            if (rent == null)
+            {
+                return null;
+            }
+            foreach (RentDetail rentDetail in rentDetails)
+            {
+                rentDetail.RentId = rent.Id;
+                rentDetail.Book = null;
+                await rentDetailRepository.Add(rentDetail);
+            }
+            return rent;
+        }
     }
 }
