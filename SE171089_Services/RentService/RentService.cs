@@ -1,4 +1,5 @@
-﻿using SE171089_Repositories.RentDetailRepository;
+﻿using SE171089_BusinessObjects;
+using SE171089_Repositories.RentDetailRepository;
 using SE171089_Repositories.RentRepository;
 
 namespace SE171089_Services.RentService
@@ -20,6 +21,16 @@ namespace SE171089_Services.RentService
                 instance ??= new();
                 return instance;
             }
+        }
+
+        public async Task<List<Rent>> GetRents()
+        {
+            return await rentRepository.GetList();
+        }
+
+        public async Task<List<Rent>> GetRentsByAccount(int accountId)
+        {
+            return await rentRepository.GetRentsByAccountId(accountId);
         }
     }
 }

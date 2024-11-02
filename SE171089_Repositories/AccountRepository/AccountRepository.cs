@@ -55,6 +55,11 @@ namespace SE171089_Repositories.AccountRepository
             return await accountDao.GetOne(id);
         }
 
+        public async Task<List<Account>> SearchAccounts(string keyword)
+        {
+            return await accountDao.SearchAccounts(keyword);
+        }
+
         public async Task<Account?> Update(Account obj)
         {
             return await accountDao.Update(obj);

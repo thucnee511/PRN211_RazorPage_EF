@@ -23,7 +23,7 @@ namespace SE171089_RazorPage.Pages.Accounts
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Role? role = (await accountService.GetRole(3));
+            Role? role = await accountService.GetRole(3);
             ViewData["RoleName"] = role.Name ?? "User";
             return Page();
         }

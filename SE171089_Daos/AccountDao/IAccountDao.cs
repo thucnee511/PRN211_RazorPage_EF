@@ -7,5 +7,6 @@ namespace SE171089_Daos.AccountDao
         Task<Account?> GetAccountByEmail(string email);
         Task<List<Account>> GetAccountsByRoleId(int roleId);
         Task<List<Account>> GetActiveAccounts();
+        Task<List<Account>> SearchAccounts(string keyword);
     }
 }

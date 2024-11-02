@@ -1,0 +1,72 @@
+@page
+@model SE171089_RazorPage.Pages.Rents.IndexModel
+@{
+    int RoleId = Convert.ToInt32(HttpContext.Session.GetString("RoleId"));
+    if (RoleId != 1 && RoleId != 2)
+    {
+        Response.Redirect("/PermissionDenied");
+    }
+}
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<form method="get">
+    <div class="form-group">
+        <input type="text" class="form-control" name="keyword"/>
+    </div>
+    <div class="form-group">
+        <input type="date" class="form-control" name="fromDate"/>
+    </div>
+    <div class="form-group">
+        <input type="date" class="form-control" name="toDate"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Rent[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rent[0].RentTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rent[0].ReturnTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rent[0].TotalQuatity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rent[0].User.Username)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Rent)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReturnTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalQuatity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Username)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

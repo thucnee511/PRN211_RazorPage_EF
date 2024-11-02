@@ -6,10 +6,11 @@ namespace SE171089_Services.AccountService
     {
         Task<Account?> Delete(int id);
         Task<Account?> GetAccountById(int v);
-        Task<IList<Account>> getActiveAccounts();
+        Task<List<Account>> getActiveAccounts();
         Task<Account?> Login(string email, string password);
         Task<Account?> Update(Account account);
         Task<Role?> GetRole(int id);
         Task<Account?> Insert(Account account);
+        Task<List<Account>> Search(string keyword);
     }
 }

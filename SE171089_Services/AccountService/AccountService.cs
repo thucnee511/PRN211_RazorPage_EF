@@ -33,7 +33,7 @@ namespace SE171089_Services.AccountService
             return await accountRepository.GetOne(v);
         }
 
-        public async Task<IList<Account>> getActiveAccounts()
+        public async Task<List<Account>> getActiveAccounts()
         {
             return await accountRepository.GetActiveAccounts();
         }
@@ -57,6 +57,11 @@ namespace SE171089_Services.AccountService
                 throw new Exception("Wrong login creadentials");
             }
             return account;
+        }
+
+        public async Task<List<Account>> Search(string keyword)
+        {
+            return await accountRepository.SearchAccounts(keyword);
         }
 
         public async Task<Account?> Update(Account account)
