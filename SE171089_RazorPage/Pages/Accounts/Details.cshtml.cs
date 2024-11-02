@@ -23,6 +23,8 @@ namespace SE171089_RazorPage.Pages.Accounts
                 return NotFound();
             }
             var account = await accountService.GetAccountById(id.Value);
+            var role = await accountService.GetRole(account.RoleId);
+            account.Role = role;
             if (account == null)
             {
                 return NotFound();
