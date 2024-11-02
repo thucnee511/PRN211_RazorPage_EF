@@ -28,6 +28,11 @@ namespace SE171089_Services.BookService
             return await categoryRepository.GetList();
         }
 
+        public async Task<Book?> GetBookById(int v)
+        {
+            return await bookRepository.GetOne(v);
+        }
+
         public async Task<List<Book>> GetBooks(int cateId, string? keyword)
         {
             return await bookRepository.SearchBook(cateId, keyword ?? "");

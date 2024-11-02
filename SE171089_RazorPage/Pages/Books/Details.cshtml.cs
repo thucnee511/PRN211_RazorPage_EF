@@ -7,28 +7,31 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SE171089_BusinessObjects;
 using SE171089_Daos;
+using SE171089_Services.BookService;
 
 namespace SE171089_RazorPage.Pages.Books
 {
     public class DetailsModel : PageModel
     {
-        private readonly SE171089_Daos.LibraryManagementContext _context;
+        private readonly IBookService bookService;
 
-        public DetailsModel(SE171089_Daos.LibraryManagementContext context)
+        public DetailsModel(IBookService bookService)
         {
-            _context = context;
+            this.bookService = bookService;
         }
 
       public Book Book { get; set; } = default!; 
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Books == null)
+            if (id == null || bookService == null)
             {
                 return NotFound();
             }
 
-            var book = await _context.Books.FirstOrDefaultAsync(m => m.Id == id);
+            var book = await bookService.GetBookById(id.GetValueOrDefault());
+            var cate = await bookService.GetCategoryById(book.CateId);
+            book.Cate = cate;
             if (book == null)
             {
                 return NotFound();
