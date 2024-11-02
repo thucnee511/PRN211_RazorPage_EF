@@ -8,5 +8,6 @@ namespace SE171089_Services.BookService
         Task<Book?> GetBookById(int v);
         Task<List<Book>> GetBooks(int cateId, string? keyword);
         Task<Category?> GetCategoryById(int id);
+        Task<Book?> Update(Book book);
     }
 }

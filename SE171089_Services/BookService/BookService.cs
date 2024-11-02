@@ -42,5 +42,10 @@ namespace SE171089_Services.BookService
         {
             return await categoryRepository.GetOne(id);
         }
+
+        public async Task<Book?> Update(Book book)
+        {
+            return await bookRepository.Update(book);
+        }
     }
 }
