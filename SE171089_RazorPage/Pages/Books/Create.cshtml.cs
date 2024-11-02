@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,39 +8,65 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SE171089_BusinessObjects;
 using SE171089_Daos;
+using SE171089_Services.BookService;
 
 namespace SE171089_RazorPage.Pages.Books
 {
     public class CreateModel : PageModel
     {
-        private readonly SE171089_Daos.LibraryManagementContext _context;
+        private readonly IBookService bookService;
 
-        public CreateModel(SE171089_Daos.LibraryManagementContext context)
+        public CreateModel(IBookService bookService)
         {
-            _context = context;
+            this.bookService = bookService;
         }
-
-        public IActionResult OnGet()
+        public List<Category> Categories { get; set; } = new();
+        public async Task<IActionResult> OnGetAsync()
         {
-        ViewData["CateId"] = new SelectList(_context.Categories, "Id", "Name");
+            Categories = await bookService.GetAllCategories();
             return Page();
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
-        
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; } = null!;
+        [BindProperty]
+        [Required(ErrorMessage = "Author is required")]
+        public string Author { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
+        [BindProperty]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
+        public int Quantity { get; set; }
+        [BindProperty]
+        public int CateId { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Books == null || Book == null)
+            if (!ModelState.IsValid || bookService == null)
             {
                 return Page();
             }
-
-            _context.Books.Add(Book);
-            await _context.SaveChangesAsync();
-
+            Categories = await bookService.GetAllCategories();
+            Book book = new()
+            {
+                Name = Name,
+                Author = Author,
+                Description = Description,
+                Quantity = Quantity,
+                CateId = CateId
+            };
+            try
+            {
+                book = await bookService.Create(book);
+            }
+            catch(Exception e)
+            {
+                ViewData["ErrorMessage"] = e.Message;
+                return Page();
+            }
             return RedirectToPage("./Index");
         }
     }

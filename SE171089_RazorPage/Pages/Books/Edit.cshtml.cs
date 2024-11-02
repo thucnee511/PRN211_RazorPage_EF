@@ -70,7 +70,7 @@ namespace SE171089_RazorPage.Pages.Books
                 Book.Description = Description;
                 Book.Quantity = Quantity;
                 Book.CateId = CateId;
-                await bookService.Update(Book);
+                await bookService.Create(Book);
             }
             catch (Exception ex)
             {

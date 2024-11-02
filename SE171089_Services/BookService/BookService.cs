@@ -52,5 +52,10 @@ namespace SE171089_Services.BookService
         {
             return await bookRepository.Update(book);
         }
+
+        public async Task<Book?> Create(Book book)
+        {
+            return await bookRepository.Add(book);
+        }
     }
 }
